@@ -37,7 +37,7 @@ defmodule ExEmail.MixProject do
 
   defp deps,
     do: [
-      {:abnf_parsec, "~> 1.2", github: "sax/abnf_parsec", branch: "fix-nimble-parsec-deprecations", runtime: false},
+      {:abnf_parsec, "~> 1.2", runtime: false},
       {:credo, "> 0.0.0", only: [:dev, :test], runtime: false},
       {:dialyxir, "> 0.0.0", only: [:dev, :test], runtime: false},
       {:ex_doc, "> 0.0.0", only: :dev, runtime: false},
