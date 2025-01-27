@@ -61,7 +61,7 @@ defmodule ExEmail.MixProject do
   defp package,
     do: [
       files: ~w(lib .formatter.exs mix.exs priv/parser/* *.md),
-      licenses: ["MIT"],
+      licenses: ["Apache 2.0"],
       maintainers: ["synchronal.dev", "Erik Hanson", "Eric Saxby"],
       links: %{"GitHub" => @scm_url}
     ]
