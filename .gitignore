@@ -1,0 +1,9 @@
+*.ez
+/_build/
+/cover/
+/deps/
+/doc/
+/tmp/
+Brewfile.lock.json
+erl_crash.dump
+ex_email-*.tar

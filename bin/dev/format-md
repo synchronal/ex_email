@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+set -e
+TMP_FILE="/tmp/.ex_email.fmt.md"
+
+assert_file() {
+  if [ ! -f "$1" ]; then
+    echo "error: file '${1}' does not exist"
+    exit 1
+  fi
+}
+
+check_all_files() {
+  for file in $(find . -name '*.md' -not -path "./deps/*"); do
+    check_file "${file}"
+  done
+}
+
+check_file() {
+  local file=$1
+
+  pandoc --from=gfm --to=gfm --wrap=auto "${file}" > "${TMP_FILE}"
+  set +e
+  diff "${file}" "${TMP_FILE}" >/dev/null
+  status=$?
+  set -e
+  rm ${TMP_FILE}
+
+  if [ $status -ne 0 ]; then
+    echo "error: ${file} has not been properly formatted" >&2
+    echo "remedy: $0 ${file}" >&2
+    return 1
+  fi
+}
+
+format_all_files() {
+  for file in $(find . -name '*.md' -not -path './deps/*'); do
+    format_file "${file}"
+  done
+}
+
+format_file() {
+  local file=$1
+
+  pandoc --from=gfm --to=gfm --wrap=auto "${file}" > "${TMP_FILE}"
+  set +e
+  diff "${file}" "${TMP_FILE}" >/dev/null
+  status=$?
+  set -e
+
+  if [ $status -ne 0 ]; then
+    echo "${file}: formatting"
+    mv ${TMP_FILE} ${file}
+  else
+    rm ${TMP_FILE}
+    echo "${file}: no change"
+  fi
+}
+
+main() {
+  case $1 in
+    --all)
+      format_all_files
+      ;;
+
+    --cd)
+      cd $2
+      shift
+      shift
+      ;;
+
+    --check)
+      check_all_files
+      ;;
+
+    *.md)
+      assert_file $1
+      format_file $1
+      ;;
+
+    *)
+      echo "unknown flag or file type: '$1'"
+      echo ""
+      echo "USAGE"
+      echo "  $0 <file> or <path>"
+      echo "  $0 --all"
+      echo "  $0 --cd <path>"
+      echo "  $0 --check"
+      exit 1
+      ;;
+  esac
+}
+
+main $@
