@@ -46,7 +46,7 @@ defmodule ExEmail do
       {:error, error, "", _, _, _} ->
         {:error, error}
 
-      {:error, _error, _remainder, _, _, _} ->
+      {:error, _error, _remainder, _, _, _} = _res ->
         {:error, "parse error"}
     end
   end
