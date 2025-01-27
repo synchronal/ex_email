@@ -11,7 +11,7 @@ defmodule ExEmail.MixProject do
       description: "Helpers for validating email addresses",
       dialyzer: dialyzer(),
       docs: docs(),
-      elixir: "~> 1.18",
+      elixir: "~> 1.16",
       homepage_url: @scm_url,
       name: "ExEmail",
       package: package(),
