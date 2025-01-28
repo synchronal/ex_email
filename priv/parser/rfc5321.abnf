@@ -38,7 +38,7 @@ hyphen-let-dig  =   *("-") let-dig
 
 ldh-str         =   1*(hyphen-let-dig / let-dig)
 
-address-literal =   "[" IPv4-address-literal "]" / "[" IPv6-address-literal "]"
+address-literal =   "[" IPv4address "]" / "[" IPv6-address-literal "]"
 
 ; Local part specification
 
@@ -92,56 +92,26 @@ UTF8-tail       =   %x80-BF
 
 ;; SMTP Address Literals
 
-; Original RFC5321 definitions of
-; ```
-;   IPv4-address-literal     =   Snum 3("." Snum)
-;   IPv6-addr                =   IPv6-full /
-;                                IPv6-comp /
-;                                IPv6v4-full /
-;                                IPv6v4-comp
-;   IPv6-hex                 =   1*4HEXDIG
-;   IPv6-full                =   IPv6-hex 7(":" IPv6-hex)
-;   IPv6-comp                =   [IPv6-hex *5(":" IPv6-hex)] "::"
-;                                [IPv6-hex *5(":" IPv6-hex)]
-;   IPv6v4-full              =   IPv6-hex 5(":" IPv6-hex) ":" IPv4-address-literal
-;   IPv6v4-comp              =   [IPv6-hex *3(":" IPv6-hex)] "::"
-;                                [IPv6-hex *3(":" IPv6-hex) ":"]
-;                                IPv4-address-literal
-; ```
-; Discarded in favor of those defined in [RFC3986 Appendix A]
-; (https://tools.ietf.org/html/rfc3986#appendix-A).
-; They are much stricter and friendlier for ABNFC parser generator.
+; Sourced from https://github.com/rbkmoney/email_validator/blob/master/src/email_validator_abnf.abnf,
+; based on RFC3986.
 
-IPv4-address-literal     =   dec-octet 3("." dec-octet)
+IPv6-address-literal = "IPv6:" IPv6address
 
-dec-octet                =   "25" %x30-35          ; 250-255
-                           / "2" %x30-34 DIGIT     ; 200-249
-                           / "1" 2DIGIT            ; 100-199
-                           / %x31-39 DIGIT         ; 10-99
-                           / DIGIT                 ; 0-9
+IPv6address     =                            6( h16 ":" ) ls32
+                /                       "::" 5( h16 ":" ) ls32
+                / [ h16               ] "::" 4( h16 ":" ) ls32
+                / [ h16 *1( ":" h16 ) ] "::" 3( h16 ":" ) ls32
+                / [ h16 *2( ":" h16 ) ] "::" 2( h16 ":" ) ls32
+                / [ h16 *3( ":" h16 ) ] "::"    h16 ":"   ls32
+                / [ h16 *4( ":" h16 ) ] "::"              ls32
+                / [ h16 *5( ":" h16 ) ] "::"              h16
+                / [ h16 *6( ":" h16 ) ] "::"
 
-IPv6-address-literal     =   "IPv6:" IPv6-addr
-
-IPv6-addr                =                               6( H16 ":" ) LS32
-                           /                        "::" 5( H16 ":" ) LS32
-                           / [ H16                ] "::" 4( H16 ":" ) LS32
-                           / [ H16 0*1( ":" H16 ) ] "::" 3( H16 ":" ) LS32
-                           / [ H16 0*2( ":" H16 ) ] "::" 2( H16 ":" ) LS32
-                           / [ H16 0*3( ":" H16 ) ] "::"    H16 ":"   LS32
-                           / [ H16 0*4( ":" H16 ) ] "::"              LS32
-                           / [ H16 0*5( ":" H16 ) ] "::"              H16
-                           / [ H16 0*6( ":" H16 ) ] "::"
-
-H16                      =   1*4HEXDIG
-
-LS32                     =   ( H16 ":" H16 ) / IPv4-address-literal
-
-;; RFC4234 CORE (For abnfc binary compatability)
-
-ALPHA           =   %x41-5A / %x61-7A   ; A-Z / a-z
-
-DIGIT           =   %x30-39             ; 0-9
-
-DQUOTE          =   %x22                ; " (Double Quote)
-
-HEXDIG          =   DIGIT / "A" / "B" / "C" / "D" / "E" / "F" ; 0-9 A-F
+h16             = 1*4HEXDIG
+ls32            = ( h16 ":" h16 ) / IPv4address
+IPv4address     = dec-octet "." dec-octet "." dec-octet "." dec-octet
+dec-octet       = "25" %x30-35       ; 250-255
+                / "2" %x30-34 DIGIT  ; 200-249
+                / "1" 2DIGIT         ; 100-199
+                / %x31-39 DIGIT      ; 10-99
+                / DIGIT              ; 0-9
