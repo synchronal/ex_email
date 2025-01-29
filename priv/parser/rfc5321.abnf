@@ -1,10 +1,10 @@
 ;;; Originally sourced from https://github.com/rbkmoney/email_validator/blob/master/src/email_validator_abnf.abnf
 ;;;
-;;; Based on RFC5321 (Simple Mail Transfer Protocol)
-;;; https://tools.ietf.org/rfc/rfc5321.txt
-;;; + Added support for RFC6532 via RFC6531 (SMTP Extension for Internationalized Email)
-;;;   https://tools.ietf.org/rfc/rfc6532.txt
-;;;   https://tools.ietf.org/rfc/rfc6531.txt
+;;; Relevant RFCs:
+;;; https://tools.ietf.org/rfc/rfc5321.txt  ; Simple Mail Transfer Protocol
+;;; https://tools.ietf.org/rfc/rfc6532.txt  ; Internationalized Email Headers
+;;; https://tools.ietf.org/rfc/rfc6531.txt  ; SMTP Extension for Internationalized
+;;; https://tools.ietf.org/rfc/rfc3986.txt  ; Uniform Resource Identifier (URI): Generic Syntax
 
 mailbox         =   local-part "@" domain
 domain          =   domain-name / address-literal
