@@ -1,6 +1,6 @@
 # ExEmail
 
-Helpers for validating email addresses.
+Helpers for parsing and validating email addresses.
 
 ## References
 
