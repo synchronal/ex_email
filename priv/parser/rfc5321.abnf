@@ -1,64 +1,36 @@
+;;; Originally sourced from https://github.com/rbkmoney/email_validator/blob/master/src/email_validator_abnf.abnf
+;;;
 ;;; Based on RFC5321 (Simple Mail Transfer Protocol)
 ;;; https://tools.ietf.org/rfc/rfc5321.txt
 ;;; + Added support for RFC6532 via RFC6531 (SMTP Extension for Internationalized Email)
 ;;;   https://tools.ietf.org/rfc/rfc6532.txt
 ;;;   https://tools.ietf.org/rfc/rfc6531.txt
-;;; + Added stricter IP address grammar
-;;;   https://tools.ietf.org/html/rfc3986#appendix-A
-;;; + No longer accept General-address-literal
-
-;; Address specification
-
-; Mailbox specification
 
 mailbox         =   local-part "@" domain
-
-; Domain specification
-
 domain          =   domain-name / address-literal
-
 domain-name     =   sub-domain *("." sub-domain)
-
 sub-domain      =   let-dig [ldh-str] / U-Label
-
 U-Label         =   1*UTF8-non-ascii
 
-; Original RFC5321 definition of
-; ```
-; Let-dig        = ALPHA / DIGIT
-; Ldh-str        = *( ALPHA / DIGIT / "-" ) Let-dig
-; address-literal =   "[" ( IPv4-address-literal / IPv6-address-literal / General-address-literal ) "]"
-; ```
-; changed for better compatability with ABNFC parser generator.
-; Following definitions are supposed to be equal to them
-
 let-dig         =   ALPHA / DIGIT
-
 hyphen-let-dig  =   *("-") let-dig
-
 ldh-str         =   1*(hyphen-let-dig / let-dig)
-
 address-literal =   "[" IPv4address "]" / "[" IPv6-address-literal "]"
 
-; Local part specification
+; ; ; Local part
 
 local-part      =   dot-string / quoted-string
-
 dot-string      =   atom *("."  atom)
-
 quoted-string   =   DQUOTE *qcontentSMTP DQUOTE
-
 qcontentSMTP    =   qtextSMTP / quoted-pairSMTP
-
 quoted-pairSMTP =   %d92 %d32-126   ; i.e., backslash followed by any ASCII
                                     ; graphic (including itself) or SPace
-
 qtextSMTP       =   %d32-33 /       ; i.e., within a quoted string, any
                     %d35-91 /       ; ASCII graphic or space is permitted
                     %d93-126 /      ; without blackslash-quoting except
                     UTF8-non-ascii  ; double-quote and the backslash itself.
 
-; Atom
+; ; ; Atom
 
 atext           =   ALPHA / DIGIT / ; Printable US-ASCII
                     "!" / "#" /     ; characters not including
@@ -71,14 +43,13 @@ atext           =   ALPHA / DIGIT / ; Printable US-ASCII
                     "`" / "{" /
                     "|" / "}" /
                     "~" / UTF8-non-ascii
-
 atom            =   1*atext
 
-;; Internationalized Email Headers
+; ; ; Internationalized Email Headers
 
 UTF8-non-ascii  =   UTF8-2 / UTF8-3 / UTF8-4
 
-; UTF-8 Byte Sequences (https://tools.ietf.org/rfc/rfc3629.txt)
+; ; ; UTF-8 Byte Sequences (https://tools.ietf.org/rfc/rfc3629.txt)
 
 UTF8-2          =   %xC2-DF UTF8-tail
 
@@ -90,10 +61,7 @@ UTF8-4          =   %xF0 %x90-BF 2( UTF8-tail ) / %xF1-F3 3( UTF8-tail ) /
 
 UTF8-tail       =   %x80-BF
 
-;; SMTP Address Literals
-
-; Sourced from https://github.com/rbkmoney/email_validator/blob/master/src/email_validator_abnf.abnf,
-; based on RFC3986.
+; ; ; Based on RFC3986, fixed for lack of backtracking.
 
 IPv6-address-literal = "IPv6:" IPv6address
 
