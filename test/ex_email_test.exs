@@ -36,10 +36,11 @@ defmodule ExEmailTest do
     {"ip@[IPv6:::1]", {"ip", "[IPv6:::1]"}},
     {"ip@[IPv6:::127.0.0.127]", {"ip", "[IPv6:::127.0.0.127]"}},
     {"ip@[IPv6:DEAD::BEEF]", {"ip", "[IPv6:DEAD::BEEF]"}},
-    # {"ip@[IPv6:dead::]", {"ip", "[IPv6:dead::]"}},
+    {"ip@[IPv6:dead::]", {"ip", "[IPv6:dead::]"}},
     {"ip@[IPv6:DEAD:BEEF::7.0.0.1]", {"ip", "[IPv6:DEAD:BEEF::7.0.0.1]"}},
-    # {"ip@[IPv6:d:e:a:d:be:ef:7.0.0.3]", {"ip", "[IPv6:d:e:a:d:be:ef:7.0.0.3]"}},
-    {"ip@[IPv6:2001:0DB8:85A3:0000:0000:8A2E:0370:7334]", {"ip", "[IPv6:2001:0DB8:85A3:0000:0000:8A2E:0370:7334]"}}
+    {"ip@[IPv6:d:e:a:d:be:ef:7.0.0.3]", {"ip", "[IPv6:d:e:a:d:be:ef:7.0.0.3]"}},
+    {"ip@[IPv6:2001:0DB8:85A3:0000:0000:8A2E:0370:7334]", {"ip", "[IPv6:2001:0DB8:85A3:0000:0000:8A2E:0370:7334]"}},
+    {"ip@[IPv6:2001:0db8:85a3:0000:0000:8a2e:0370:7334]", {"ip", "[IPv6:2001:0db8:85a3:0000:0000:8a2e:0370:7334]"}}
   ]
 
   @utf8_addresses [
