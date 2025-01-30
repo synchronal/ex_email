@@ -30,9 +30,19 @@ defmodule ExEmail.ParserTest do
                Parser.local_part("name1234")
     end
 
-    @tag :skip
     test "utf8" do
-      assert {:ok, [local_part: [dot_string: [atom: [atext: ~c"ö", atext: ~c"ö"]]]], "", %{}, {1, 0}, 2} =
+      assert {:ok,
+              [
+                local_part: [
+                  dot_string: [
+                    atom: [
+                      atext: [{:utf8_non_ascii, [utf8_2: [195, {:utf8_tail, [182]}]]}],
+                      atext: [{:utf8_non_ascii, [utf8_2: [195, {:utf8_tail, [182]}]]}]
+                    ]
+                  ]
+                ]
+              ], "", %{}, {1, 0},
+              4} =
                Parser.local_part("öö")
     end
   end

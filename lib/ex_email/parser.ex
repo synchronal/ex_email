@@ -5,5 +5,6 @@ defmodule ExEmail.Parser do
 
   use AbnfParsec,
     abnf_file: "priv/parser/rfc5321.abnf",
+    mode: :byte,
     parse: :mailbox
 end
