@@ -11,12 +11,15 @@ defmodule ExEmail do
 
   @type t() :: {String.t(), String.t()}
 
-  # @spec validate(String.t()) :: :ok
-  # def validate(address) do
-  #   :ok
-  # end
+  @spec validate(String.t()) :: :ok | {:error, Error.t()}
+  def validate(address) do
+    case parse(address) do
+      {:ok, _} -> :ok
+      {:error, error} -> {:error, error}
+    end
+  end
 
-  @spec parse(String.t()) :: {:ok, t()} | {:error, term()}
+  @spec parse(String.t()) :: {:ok, t()} | {:error, Error.t()}
   def parse(address) when is_binary(address),
     do: parse_address(address)
 

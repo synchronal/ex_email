@@ -132,11 +132,59 @@ defmodule ExEmailTest do
     end
   end
 
-  # describe "validate" do
-  #   test "validates simple email addresses" do
-  #     for address <- @simple_addresses do
-  #       assert ExEmail.validate(address) == :ok, "Expected address #{address} to be valid"
-  #     end
-  #   end
-  # end
+  describe "validate" do
+    test "validates simple email addresses" do
+      for {address, _} <- @simple_addresses do
+        assert ExEmail.validate(address) == :ok, "Expected address #{address} to be valid"
+      end
+    end
+
+    test "validates emails with special characters" do
+      for {address, _} <- @special_characters do
+        assert ExEmail.validate(address) == :ok, "Expected address #{address} to be valid"
+      end
+    end
+
+    test "validates emails with ipv4 and ipv6 addresses" do
+      for {address, _} <- @ip_addresses do
+        assert ExEmail.validate(address) == :ok, "Expected address #{address} to be valid"
+      end
+    end
+
+    test "validates emails with utf8 characters" do
+      for {address, _} <- @utf8_addresses do
+        assert ExEmail.validate(address) == :ok, "Expected address #{address} to be valid"
+      end
+    end
+
+    test "returns an error when invalid format" do
+      assert {:error, %Error{message: ~s|expected string "@"|}} = ExEmail.validate("x")
+      assert {:error, %Error{message: ~s|expected string "@"|}} = ExEmail.validate("abc.example.com")
+      assert {:error, %Error{message: ~s|parse error|}} = ExEmail.validate("@example.com")
+      assert {:error, %Error{message: ~s|expected string| <> _}} = ExEmail.validate("abc@")
+
+      assert {:error, %Error{message: ~s|email contains invalid remainder "@c@example.com"|}} =
+               ExEmail.validate("a@b@c@example.com")
+
+      assert {:error, %Error{message: ~s|parse error|}} = ExEmail.validate(~s|a"b(c)d,e:f;g<h>i[j\k]l@example.com|)
+      assert {:error, %Error{message: ~s|parse error|}} = ExEmail.validate("just\"not\"right@example.com")
+      assert {:error, %Error{message: ~s|parse error|}} = ExEmail.validate("this is\"not\\allowed@example.com")
+
+      assert {:error, %Error{message: ~s|parse error|}} =
+               ExEmail.validate("this\\ still\\\"not\\allowed@example.com")
+    end
+
+    test "returns an error when the local part is greater than 64 characters" do
+      assert {:error, %Error{message: "local part is too large"}} =
+               ExEmail.validate("1234567890123456789012345678901234567890123456789012345678901234x@example.com")
+    end
+
+    test "returns an error when the domain part is greater than 255 characters" do
+      assert {:error, %Error{message: "domain part is too large"}} =
+               ExEmail.validate("abc@#{String.pad_leading("", 255 - 3, "a")}.com")
+
+      assert :ok =
+               ExEmail.validate("abc@#{String.pad_leading("", 255 - 4, "a")}.com")
+    end
+  end
 end
