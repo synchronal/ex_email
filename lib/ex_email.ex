@@ -20,8 +20,12 @@ defmodule ExEmail do
   end
 
   @spec parse(String.t()) :: {:ok, t()} | {:error, Error.t()}
-  def parse(address) when is_binary(address),
-    do: parse_address(address)
+  def parse(address) when is_binary(address) do
+    case parse_address(address) do
+      {:ok, result} -> {:ok, result}
+      {:error, msg} -> {:error, Error.new(msg, address)}
+    end
+  end
 
   # # #
 
@@ -30,8 +34,6 @@ defmodule ExEmail do
          {:ok, local} <- parse_local(local),
          {:ok, domain} <- parse_domain(domain) do
       {:ok, {local, domain}}
-    else
-      {:error, msg} -> {:error, Error.new(msg, address)}
     end
   end
 
