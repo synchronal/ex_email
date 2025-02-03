@@ -2,7 +2,7 @@ defmodule ExEmail.MixProject do
   use Mix.Project
 
   @scm_url "https://github.com/synchronal/ex_email"
-  @version "0.1.0"
+  @version "0.1.1"
 
   def project,
     do: [
