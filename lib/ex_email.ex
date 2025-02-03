@@ -68,6 +68,10 @@ defmodule ExEmail do
   ``` elixir
   iex> ExEmail.parse("a@example.com")
   {:ok, {"a", "example.com"}}
+  iex> ExEmail.parse("a@[127.0.0.1]")
+  {:ok, {"a", "[127.0.0.1]"}}
+  iex> ExEmail.parse("a@[IPv6:::1]")
+  {:ok, {"a", "[IPv6:::1]"}}
 
   iex> ExEmail.parse("@example.com")
   {:error, ExEmail.Error.new("parse error", "@example.com")}
