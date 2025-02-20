@@ -95,8 +95,8 @@ defmodule ExEmail do
     end
   end
 
-  defp parse_address(address),
-    do: {:error, Error.new("address too large", address)}
+  defp parse_address(_address),
+    do: {:error, "address is too large"}
 
   defp parse_mailbox(address) do
     case ExEmail.Parser.mailbox(address) do

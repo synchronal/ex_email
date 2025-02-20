@@ -186,5 +186,10 @@ defmodule ExEmailTest do
       assert :ok =
                ExEmail.validate("abc@#{String.pad_leading("", 255 - 4, "a")}.com")
     end
+
+    test "returns an error when the total length of the email is too long" do
+      assert {:error, %Error{message: "address is too large"}} =
+               ExEmail.validate(String.pad_leading("", 255 + 64 + 2, "a"))
+    end
   end
 end
