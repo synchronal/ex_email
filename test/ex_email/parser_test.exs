@@ -4,7 +4,7 @@ defmodule ExEmail.ParserTest do
 
   describe "local_part" do
     test "alpha" do
-      assert {:ok, [local_part: [dot_string: [atom: [atext: ~c"a"]]]], "", %{}, {1, 0}, 1} =
+      assert {:ok, [local_part: [dot_string: [atom: [atext: ["a"]]]]], "", %{}, {1, 0}, 1} =
                Parser.local_part("a")
     end
 
@@ -14,14 +14,14 @@ defmodule ExEmail.ParserTest do
                 local_part: [
                   dot_string: [
                     atom: [
-                      atext: ~c"n",
-                      atext: ~c"a",
-                      atext: ~c"m",
-                      atext: ~c"e",
-                      atext: ~c"1",
-                      atext: ~c"2",
-                      atext: ~c"3",
-                      atext: ~c"4"
+                      atext: ["n"],
+                      atext: ["a"],
+                      atext: ["m"],
+                      atext: ["e"],
+                      atext: ["1"],
+                      atext: ["2"],
+                      atext: ["3"],
+                      atext: ["4"]
                     ]
                   ]
                 ]
