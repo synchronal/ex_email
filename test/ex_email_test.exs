@@ -5,6 +5,7 @@ defmodule ExEmailTest do
   doctest ExEmail
 
   @simple_addresses [
+    {"simple@localhost", {"simple", "localhost"}},
     {"simple@example.com", {"simple", "example.com"}},
     {"very.common@example.com", {"very.common", "example.com"}},
     {"disposable.style.email.with+symbol@example.com", {"disposable.style.email.with+symbol", "example.com"}},
