@@ -63,6 +63,9 @@ defmodule ExEmail.MixProject do
       files: ~w(lib .formatter.exs mix.exs priv/parser/* *.md),
       licenses: ["Apache-2.0"],
       maintainers: ["synchronal.dev", "Erik Hanson", "Eric Saxby"],
-      links: %{"GitHub" => @scm_url}
+      links: %{
+        "GitHub" => @scm_url,
+        "Sponsor" => "https://github.com/sponsors/reflective-dev"
+      }
     ]
 end
