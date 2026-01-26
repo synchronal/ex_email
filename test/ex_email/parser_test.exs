@@ -25,8 +25,7 @@ defmodule ExEmail.ParserTest do
                     ]
                   ]
                 ]
-              ], "", %{}, {1, 0},
-              8} =
+              ], "", %{}, {1, 0}, 8} =
                Parser.local_part("name1234")
     end
 
@@ -41,8 +40,7 @@ defmodule ExEmail.ParserTest do
                     ]
                   ]
                 ]
-              ], "", %{}, {1, 0},
-              4} =
+              ], "", %{}, {1, 0}, 4} =
                Parser.local_part("öö")
     end
   end
