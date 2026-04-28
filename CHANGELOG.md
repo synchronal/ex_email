@@ -1,5 +1,9 @@
 # Change log
 
+## v1.0.1
+
+- Update deps.
+
 ## v1.0.0
 
 - Update AbnfParsec to 2.0.
